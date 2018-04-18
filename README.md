@@ -1,24 +1,115 @@
-# README
+# Rails Engine
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This project utilizes Ruby on Rails and ActiveRecord to build a JSON API which exposes sales data selected from Etsy. This api serves up business analytics, relational endpoints, and record endpoints. Below is a database schema explaining the relationships between each endpoint: merchant, customer, items, invoices, transactions and invoice items.
 
-Things you may want to cover:
+![schema](https://i.imgur.com/gzoHyeR.png)
 
-* Ruby version
+## Table of Contents
+- [Getting Started](#getting-started)
+- [Prerequisites](#prequisites)
+- [Installing](#installing)
+- [Complex Queries](#complex-querying)
+- [Running the Tests](#running-the-tests)
+- [End to End Testing](#break-down-into-end-to-end-tests)
+- [Coding Style Tests](#and-coding-style-tests)
+- [Built With](#built-with)
+- [Contributing](#contributing)
+- [Authors](#authors)
+- [Acknowledgements](#acknowledgments)
 
-* System dependencies
+## Getting Started
 
-* Configuration
+These instructions will get you a copy of the rails engine API up and running on your local machine for development and testing purposes.
 
-* Database creation
+## Prerequisites
 
-* Database initialization
 
-* How to run the test suite
+* Ruby, version 2.5
+* Rails, version 5.1.5
+* Puma, version 3.7
+* Rspec-Rails
 
-* Services (job queues, cache servers, search engines, etc.)
+After cloning down this repository, change into the directory ```rales_engine``` and run:
 
-* Deployment instructions
+```
+bundle
+```
 
-* ...
+## Installing
+
+To setup the database necessary for this API, run the following commands:
+
+```
+rails db:create
+rails db:migrate
+rake import_csv
+```
+## Complex Queries
+
+To view some complex data querying run the following:
+
+```
+rails c
+```
+
+After the console is open:
+
+```
+Items.most_items
+Items.most_revenue
+Transaction.total_revenue_by_date("2012-03-16")
+Merchant.first.customers_with_pending_invoices
+
+```
+
+
+## Running the tests
+
+In order to run the test suite, run the following command:
+```
+rspec
+```
+
+## Break down into end to end tests
+
+* Simple Model Test:
+
+The following test ensures that an invoice has a status and all the appropriate associated data.
+
+```
+rspec spec/models/invoice_spec.rb
+```
+
+* Complex Model Test:
+
+The following test makes use ten separate [factorybot](https://github.com/thoughtbot/factory_bot) factories to ensure that a merchant has a name and that it has all the appropriate associations(e.g., has many invoices_items through invoices). The class method ```.most_revenue``` selects the top merchants ranked by revenue. The class method ```.most_items``` selects the top merchants ranked by total number of items sold. The instance method ```#top_revenue_by_date```selects the total revenue for a specific merchant on an invoice date.
+
+```
+rspec spec/models/merchant_spec.rb
+```
+
+* Simple Request Test:
+
+The following test ensures that all invoices associated with a specific customer are returned.
+
+```
+rspec spec/requests/api/v1/customers/invoices_request_spec.rb
+```
+
+
+* Complex Request Test:
+
+When a request goes to the invoice_items record endpoint, a user can find an invoice item by id, unit_price, quantity or all invoice items matching a unit price or quantity.
+
+```
+rspec spec/requests/api/v1/invoice_items/invoice_items_request_spec.rb
+```
+
+
+## Built With
+
+* [active model serializers](https://github.com/rails-api/active_model_serializers)
+* [factorybot](https://github.com/thoughtbot/factory_bot)
+* [database cleaner](https://github.com/DatabaseCleaner/database_cleaner)
+* [shoulda matchers](https://github.com/thoughtbot/shoulda-matchers)
+
