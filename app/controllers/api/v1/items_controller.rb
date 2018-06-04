@@ -3,4 +3,13 @@ class Api::V1::ItemsController < ApplicationController
     render json: {inventory: Item.all}
   end
 
+  def create
+    render json: Item.create(item_params)
+  end
+
+  private
+
+    def item_params
+      params.require(:item).permit(:name, :description, :unit_price)
+    end
 end
