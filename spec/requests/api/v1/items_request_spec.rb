@@ -11,7 +11,7 @@ describe "Items API" do
   end
 
   it "create an item" do
-    item_params = {name: "Vibranium shield", description: "Captain America's tool of choice.", unit_price: 2}
+    item_params = {name: "Vibranium shield", description: "Round star spangled shield.", unit_price: 2}
 
     post '/api/v1/items', params: {item: item_params}
 
@@ -21,4 +21,18 @@ describe "Items API" do
 
     expect(item.name).to eq(item_params[:name])
   end
+
+  it "can update an item" do
+    id = create(:item).id
+    previous_name = Item.last.name
+    item_params = { name: "Sceptor" }
+
+    put "/api/v1/items/#{id}", params: {item: item_params}
+    item = Item.find_by(id: id)
+
+    expect(response).to be_success
+    expect(item.name).to_not eq(previous_name)
+    expect(item.name).to eq("Sceptor")
+  end
+
 end
