@@ -11,6 +11,10 @@ class Api::V1::ItemsController < ApplicationController
     render json: Item.update(params[:id], item_params)
   end
 
+  def show
+
+  end
+
   private
 
     def item_params

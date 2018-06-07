@@ -11,7 +11,7 @@ describe "Items API" do
   end
 
   it "Create an item" do
-    item_params = {name: "Vibranium shield", description: "Round star spangled shield.", unit_price: 2}
+    item_params = {name: "Vibranium shield", description: "Round, star spangled shield.", unit_price: 2}
 
     post '/api/v1/items', params: {item: item_params}
 
@@ -33,6 +33,16 @@ describe "Items API" do
     expect(response).to be_success
     expect(item.name).to_not eq(previous_name)
     expect(item.name).to eq("Sceptor")
+  end
+
+  it "Can show an individual item" do
+    id = create(:item).id
+    item_params = {name: "Tesseract"}
+
+    get "/api/v1/items/#{id}", params: {item: item_params}
+    item = Item.find_by(id: id)
+
+    expect(response).to be_success
   end
 
 end
