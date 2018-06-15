@@ -12,7 +12,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def show
-
+    render json: {inventory: Item.show(params[:id])}
   end
 
   private

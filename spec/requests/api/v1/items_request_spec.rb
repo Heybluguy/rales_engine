@@ -35,7 +35,7 @@ describe "Items API" do
     expect(item.name).to eq("Sceptor")
   end
 
-  it "Can show an individual item" do
+  it "Can destroy an individual item" do
     id = create(:item).id
     item_params = {name: "Tesseract"}
 
@@ -43,6 +43,7 @@ describe "Items API" do
     item = Item.find_by(id: id)
 
     expect(response).to be_success
+    expect(item.name).to eq("Tesserract")
   end
 
 end
